@@ -52,6 +52,8 @@ padding: 18px;
 border-radius: 10px;
 margin-bottom: 12px;
 border-left: 4px solid #e50914;
+animation: cardReveal 2.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+animation-delay: calc(var(--card-index) * 1.6s);
 }
 .movie-card:hover{
 background-color: #e50914;
@@ -71,6 +73,17 @@ transition: 0.2s ease;
     background-color: #e50914;
     color: white;
 }
+@keyframes cardReveal {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 </style>
 """, unsafe_allow_html=True)
 col1,col2,col3=st.columns(3)
@@ -84,6 +97,6 @@ if st.button("Get Recommendation"):
     if len(set([movie_a, movie_b, movie_c])) == 3:
         recommendations=train.get_recommendations(movie_a,movie_b,movie_c,train.df,train.tfidf_matrix)
         for index, row in recommendations.iterrows():
-            st.markdown(f'<div class="movie-card">{row["title"]}</div>',unsafe_allow_html=True)
+            st.markdown(f'<div class="movie-card" style="--card-index">{row["title"]}</div>',unsafe_allow_html=True)
     else:
         st.warning("Please select three different movies.")
